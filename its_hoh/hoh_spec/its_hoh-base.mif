@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- the [name]-combined.mif file contains information specific to both the BALLOTING of the document, and the document contents (which will be in the [name]-package.mif file).  The opening elements include:
+	<historyItem/> Identifies the author and records the data-time stamp of last editing. The contained <description/> is solely
+		an annotation.
+	<packageLocation/> Provides the formal "name" that identifies the item being balloted and the name space 
+		(like UV") in which the ballot will occur. 
+	<header/> Includes 
+		<responsibleGroup/>  (The primary Work Group responsible for the item); and a series of 
+		<contributor/> (A series of elements listing the roles, names and affiliations of the Co-Chairs, Contributors 
+			and Editors for the document.)
+	<annotations/> Descendants of this element, specifically "annotations/documentation/description/text" holds mark up that includes:
+			 Notes to Readers; 
+				Summary of Changes from Previous Release; and 
+				Other information to hightlight for readers, such as open issues, scope of ballot, etc.
+
+Important Notes:
+*- In the root element (<package/>):
+    -The "schemaVersion" attribute needs to be "2.2.1"
+    -The xsd path string in the "xsi:schemaLocation" attribute points to the location of the mif-model-package.xsd schema 
+    in order to provide for validation of this document.
+
+*-The "name" attribute in <packageLocation/> should match the corresponding attribute in the <packageLocation/> element 
+   of the <freehandDocument/> (under element <content/>). This identifying "name"  is a value assigned by publishing. 
+   It is a unique identifer for this package across HL7.
+
+*- In the <historyItem/> element:
+    -The "dateTime" attribute should be updated periodically as you edit the document.  This time will appear at the beginning 
+           of the rendered document as the "Last Edited" time. Current date is more important than the hours and minutes.
+    - The "responsiblePersonName" attribute will be used by Publishing as the contact person in case there is a problem
+
+*-The groupName attribute in <responsibleGroup/> should be set to the primary WG owner of the ballotable document.
+-->
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:hl7-org:v3/mif2"
+   title="HL7 Cross Product Specification: Transmission of HL7 Artifacts Using HTTP 1.1, Release 1"
+         isComplete="true"
+         schemaVersion="2.2.1"
+         xsi:schemaLocation="urn:hl7-org:v3/mif2 ../../support/xsd/mif-model-package.xsd">
+   	<historyItem dateTime="2012-02-14T18:20:00" 
+						responsiblePersonName="Andy Stechishin">
+		<description> 
+			<text>
+				<p>This MIF ballot has a <b>lastEdit</b> date-time as shown in this <i>historyItem</i>.</p>
+			</text>
+		</description>
+	</historyItem>
+   <packageLocation root="BAL" realmNamespace="UV" name="its_hoh"/>
+   <header primaryRepository="http://gforge.hl7.org/svn/xmlpublishing/trunk/v3-pub-gen-migration/input/infrastructure/its_hoh">
+      <responsibleGroup groupName="ITS Work Group" organizationName="HL7"/>
+      <contributor>
+         <role>Primary Author and Editor</role>
+         <name name="James Agnew"/>
+         <affiliation>University Health Network, University Hospitals, Toronto</affiliation>
+         <email>mailto:jamesagnew@gmail.com</email>
+      </contributor>
+      <contributor>
+         <role>Co-Chair, ITS Work Group</role>
+         <name name="Paul Knapp"/>
+         <affiliation>PKnapp consulting</affiliation>
+         <email>mailto:pknapp@pknapp.com</email>
+      </contributor>
+      <contributor>
+         <role>Co-Chair, ITS Work Group</role>
+         <name name="Dale Nelson"/>
+         <affiliation>Lantana Group</affiliation>
+         <email>mailto:dale.nelson@lantanagroup.com</email>
+      </contributor>
+      <contributor>
+         <role>Co-Chair, ITS Work Group</role>
+         <name name="Andy Stechishin"/>
+         <affiliation>CANA Software &amp; Services Ltd.</affiliation>
+         <email>mailto:andy.stechishin@gmail.com</email>
+      </contributor>
+      <contributor>
+         <role>Contributor</role>
+         <name name="Vassil Petyev"/>
+         <affiliation>EPIC</affiliation>
+         <email>mailto:vassil@epic.com</email>
+      </contributor>
+      <contributor>
+         <role>Contributor</role>
+         <name name="Rolim Cabrita"/>
+         <affiliation>Interfaceware</affiliation>
+         <email>mailto:rolim.cabrita@interfaceware.com</email>
+      </contributor>
+   </header>
+   <annotations>
+      <documentation><!-- the documentation element contains documentation related to the ballot package. -->
+		  <description>
+            <text><!-- The Preface SHALL use the following ordering:
+				1 - Notes to Readers  (REQUIRED)
+				2 - Acknowledgements
+				3 - Changes from Previous Release  (REQUIRED: this section SHALL list all Substantive Changes since the last ballot of the material.)
+				4 - Prerequisites, Assumptions and Conventions
+				5 - Known Issues or Planned Changes
+				6 - Other Notes            
+            -->
+			   <div hl7Id="prefNotes" title="Notes to Readers">
+			      <p>
+			         HL7 over HTTP is an initiative to provide a standardized
+			         transport mechanism to send HL7 content over a network
+			         using the HTTP protocol.
+			      </p>
+			   </div>
+               <div hl7Id="prefAssumptions" title="Assumptions/Conventions">
+                  <p>
+                     Requirement levels (MUST, SHOULD, etc.) are used according to
+                     RFC 2119 (<a href="http://www.ietf.org/rfc/rfc2119.txt">http://www.ietf.org/rfc/rfc2119.txt</a>).
+                  </p>
+                  <p>It is assumed that the reader is familiar with the standard HTTP/1.1 protocol 
+                     (defined in <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a>).</p>
+               </div>
+            </text>
+         </description>
+      </documentation>
+   </annotations>
+   <content>
+      <freehandDocument schemaVersion="2.2.1" title="HL7 Cross Product Specification: Transmission of HL7 Artifacts Using HTTP 1.1, Release 1"
+                        approvalCategory="votable">
+	  <packageLocation root="DEFN" artifact="DC" realmNamespace="UV" name="its_hoh"/>
+      <documentContent><!-- This is the actual content of the free-hand document, expressed in a given language. -->
+		  <text>
+			  <div hl7Id="DOCintro" title="Introduction">
+                  <div hl7Id="DOCintroOvw2" title="Overview">
+                     <p>The sections below provide a basic overview of the common block and in-line elements that can be used in building a freehand document.
+					These examples cover some of the most basic elements and their attributes.  Additional elements and attributes may be available.  Refer to the 
+					definitions in mif-model-package.xsd.</p>
+                  </div>
+                  <div hl7Id="DOCblockElementExamples" title="Examples of Common Block Elements">
+                     <div hl7Id="DOCexampleSubDiv" title="Example of a Sub-Div"><!-- Note that you can nest divs.  Divs are the basic contains for other Block Elements, such as paragraphs and lists.--></div>
+                     <p>The paragraph is a child of a div and will contain text and in-line elements.  Most of your free text will be in paragraph form.</p>
+                  </div>
+                  <!-- Examples of INLINE Elements. --><div hl7Id="DOCinlineElementExamples" title="Examples of Common Inline Elements">
+                     <p>Referencing a Location in the Current Document:  The following example shows how to use an anchor to refer to <a href="#namedanchorintext">Named Anchor Location</a>.<br/>
+                        <!-- If you define an anchor in your document, you may use an achor with the href set to the anchor name to refer to it, as in the example above.-->
+						You can also construct a link to a section using the hl7Id reference.  
+						To jump to the overview, you would <a href="#DOCintroOvw2">click here</a>.</p>
+                  <div hl7Id="DOCreferences" title="Creating References to Images and Other Objects">
+                     <p>
+                        <b>Images</b> You can insert an in-line image using an &lt;img&gt; tag.
+						
+						<img alt="caption-string" src="url-for-image" imageType="application/jpeg"/>
+                     </p>
+                     <div title="Defined &lt;object/&gt; elements for HL7-specific references" hl7Id="HL7-specificReferences">
+						 <p> The HL7 xhtml markup uses the &lt;object/&gt; element with a series of child &lt;param/&gt; elements to define particular reference constructs.  Each of the &lt;param/&gt; elements has both a "name" attribute and a "value" attribute. Text within the body of the &lt;object/&gt; element is the text that will hold the hyper-link.</p>
+							<p>For example an <b>External Specification Reference</b> provides references to other V3 specifications and is used in the the following example code:</p>
+							<code>&lt;object name="externalSpecRef"&gt;&lt;param name="spec" value="../../help/v3guide/v3guide"/&gt;link&lt;/object&gt;</code> 
+							<p> The resulting  <object name="externalSpecRef"><param name="spec" value="../../help/v3guide/v3guide"/>link</object> will take you to the Version 3 Guide.  Note that an externalSpecRef object takes a single parameter with a "name" of spec.  The value of the param is a relative link to the specification being referenced.  You can link to any specification in the V3 standards by using the two up, two down rule.  The two up is expressed as you would expect for a relative link in html, as ",,/../".  You can then insert the section, folder name, and file name (without extension).
+							</p>
+							 <p>The following table illustrates the set of HL7-defined object patterns.  This contents of this table indicate required elements, enumerated values and other rules, as follows:</p>
+							 <ul>
+									<li><b>Object and Description</b> column - summarizes the use or purpose of the object</li>
+									<li><b>Object/Name</b> column - provides the required value for the @name attribute of the &lt;object/>.</li>
+									<li><b>Param/Name</b> column - lists the @name values for the &lt;param/> element(s) (if, any) used by this variant of &lt;object/>. If more than one parameter is listed they will appear on multiple rows within the 3rd and 4th columns, and there is no significance to the order of the parameters. The content is subject to the following interpretations: 
+										<ul><li>If this cell contains "n/a", there is no param for this variant.</li>
+											<li>Other wise, the first string is the @name value for the param.</li>
+											<li>If the param name is <b>bold</b>, the param is required to be present.</li>
+											<li>If the param value is one of an enumerated set, the set name follows in square brackets.</li>
+											<li>If this column holds a comma-separated list of entries in curly braces, it specifies a <b>list of params that must or may be used</b> (names in <b>bold if required</b>).  These usually indicate values found in the attributes of the &lt;packageLocation/> element of the item being referenced.</li>
+											<li>Finally, there may be a brief description of the param.</li>
+										</ul>
+									</li>
+									<li><b>Param/value</b> column - describes the value to be used and lists the enumerated set, if values must be drawn from such a set. Specifically:
+									<ul><li>If there is a single value shown <b>in bold</b>, this is the required single value for this attribute</li>
+											<li>If an enumerated list is provided, it is shown as a comma-separated list inside of curly braces.</li>
+										</ul></li>
+									<li><b>Default content</b> column - shows whether a "text node" may appear in the body of the element and what text will be provided by default if there is no text.  This is the text that will displayed with the hyper-link for those objects that are references. Entries in this column may include:
+										<ul><li>The word "Prohibited" in bold requires that there be no text content, and indicates that a different construct (see "Object and Description") will be rendered in place of the object.</li>
+										      <li> "Required" in bold indicates that there must be a text node and what its purpose is.</li>
+										      <li> An italicized phrase states the default content, expressed either as a component of the element containing the &lt;object/> or as a component of the item being referenced.  When there is a default, the text node is optional.  If it is not provided, the default text will hold the hyper-link; and if a text node is provided, the contents of that node will hold the hyper-link.</li>
+										</ul>
+									</li>
+								</ul>
+						</div>
+					</div>
+                  <div hl7Id="CECprocess2" title="Refinement process">
+                     <p>The HL7 methodology uses the <object name="externalSpecRef">
+                           <param name="spec" value="../../help/v3guide/v3guide"/>
+                           <param name="linkToEnd" value="v3ginfomdl"/>Reference Information Model (RIM)</object> and the HL7-specified <object name="externalSpecRef">
+                           <param name="spec" value="../../infrastructure/datatypes/datatypes"/>Vocabulary Domains, and the Version 3 Data Type Specification </object> as its starting point.  It then establishes the rules for refining these base standards to arrive at the information structures that specify Message Types and equivalent structures in Version 3.</p>
+                     <p>The strategy for development of Version 3 messages and related information structures, as discussed in the <object name="externalSpecRef">
+                           <param name="spec" value="../../help/v3guide/v3guide"/>Version 3 Guide</object>, is based upon the consistent application of constraints to a pair of base specifications &#150; the <object name="externalSpecRef">
+                           <param name="spec" value="../../infrastructure/rim/rim"/>HL7 Reference Information Model (RIM)</object> and the <object name="externalSpecRef">
+                           <param name="spec" value="../../infrastructure/vocabulary/vocabulary"/>HL7 Vocabulary Domains</object> &#150; and upon the extension of those specifications to create representations constrained to address a specific health care requirement.  The processes described are precisely the processes that the HL7 Technical Committees followed in developing Version 3 standards.  Thus, this section also serves as a reference work for the core standard.</p>
+                     <p>Just as the standard is developed using a series of constraints and targeted extensions, the design of applications to implement these messages, the definition of conformance claims, and the definition of localization specifications, will all require further constraint and extension of the base standard.</p>
+                     <p>The following figure shows the refinement process specified in the methodology. Each red arrow in the diagram represents an application of the processes detailed in this section of the ballot. As diagrammed, the processes are used to derive one or more <object name="externalSpecRef">
+                           <param name="spec" value="../../help/v3guide/v3guide"/>
+                           <param name="linkToEnd" value="v3dmim"/>Domain Message Information Models (D-MIM)</object> from the RIM. Each such model represents the set of concepts applicable to a particular health care domain of interest.</p>
+                     <img class="graphic" src="ConstraintCycle.gif"
+                          alt="Refinement Process  for defining messages based on the HL7 RIM"
+                          imageType="image/gif"/>
+                     <img class="graphic" src="ConstraintCycle2.gif" alt="ConstraintCycle2.gif"
+                          imageType="image/gif"/>
+                  </div>
+                  </div>
+			     </div>
+            </text>
+         </documentContent>
+      </freehandDocument>
+   </content>
+</package>

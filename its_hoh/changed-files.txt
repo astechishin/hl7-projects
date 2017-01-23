@@ -1,0 +1,5 @@
+Changed files:
+
+publish-global.properties
+defined-environments.properties
+build-publish.xml

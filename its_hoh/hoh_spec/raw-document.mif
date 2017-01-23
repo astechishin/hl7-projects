@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<freehandDocument xmlns="urn:hl7-org:v3/mif2"
+                  xmlns:mvn="http://maven.apache.org/XDOC/2.0"
+                  schemaVersion="2.2.1">
+   <packageLocation root="BAL" artifact="DC" name="hoh"/>
+   <documentContent>
+      <text>
+         <div title="Specification" hl7Id="Specification">
+            <p>
+				HL7 over HTTP is an initiative to provide a standardized
+				transport mechanism to send HL7 v2 messages over a network
+				using the HTTP protocol.
+			</p>
+            <p>
+				Requirement levels (MUST, SHOULD, etc.) are used according to
+				RFC 2119 (<a href="http://www.ietf.org/rfc/rfc2119.txt">http://www.ietf.org/rfc/rfc2119.txt</a>).
+			</p>
+         </div>
+         <div title="Introduction" hl7Id="Introduction">
+            <p>
+				HL7 over HTTP is a transport mechanism which uses the
+				Hypertext Transfer Protocol (as defined in
+				<a href="http://tools.ietf.org/html/rfc2616">RFC 2616</a>)
+				to transmit HL7 messages.
+			</p>
+            <div title="Intent" hl7Id="Introduction.1">
+               <p>
+					HL7 over HTTP is intended as an alternative to the traditional
+					Minimal Lower Layer Protocol (MLLP), and provides a number
+					of key improvements:
+				</p>
+               <ul>
+                  <li>
+						HTTP is widely used for a variety of purposes, and is
+						well understood by application developers, network engineers, etc.
+					</li>
+                  <li>
+						HTTP allows for authentication (username/password) and character
+						set encoding to be specified in a standardized way.
+					</li>
+                  <li>
+						Tool and hardware support for HTTP is widespread, with many specialized
+						software and hardware devices providing enhanced support for common
+						protocols such as HTTP. In addition, HTTP is widely supported on many
+						platforms, and may be viewed as a "commodity-level" feature. Many
+						languages and toolsets have built in support for HTTP. 
+					</li>
+               </ul>
+            </div>
+            <div title="Scope" hl7Id="Introduction.2">
+               <p>
+					HL7 over HTTP is intended as a <b>transport level protocol</b> for transactional
+					messaging between systems which support HL7 protocols.
+				</p>
+               <p>
+					HL7 over HTTP is <b>not</b> intended to provide a different messaging paradigm
+					for HL7 v2 messages (e.g. REST-ful services).
+				</p>
+            </div>
+         </div>
+         <div title="Specification" hl7Id="Specification">
+            <p>
+				HL7 over HTTP uses the standard HTTP/1.1 protocol 
+				(<a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a>)
+				as a mechanism to transfer
+				a raw HL7 message using standard HL7 encoding (i.e. "vertical bar" or XML) encoding to a destination, and then
+				to receive a response to that message.  
+			</p>
+            <div title="Use of HTTP" hl7Id="Specification.1">
+               <p>
+					HL7 over HTTP is a <b>constraint</b> of the HTTP/1.1 specification. This 
+					means that it should be possible to configure any conformant HTTP implementation
+					to comply with this specification, but it does not mean that any conformant
+					HTTP implementation is necessarily compliant with HL7 over HTTP.
+				</p>
+               <p>
+					HL7 over HTTP does not extend HTTP/1.1 in any way. There are no protocol features
+					in the specification which are not a part of the source specification.
+				</p>
+               <p>
+					All recommended and required constraints on the HTTP specification are 
+					defined in the following sections.
+				</p>
+            </div>
+            <div title="Transport Messages" hl7Id="Specification.2">
+               <p>
+					Every interaction consists of a <b>request message</b> and a <b>response message</b>.
+					In a normal message exchange, the receiving system opens a server socket. The
+					sending system then connects to that socket and uses the HTTP POST action to 
+					transmit a message. The receiving system then replies with an HTTP 2xx success,
+					and transmits the response message (typically an HL7 Acknowledgement/ACK message) 
+					in the body of the response.
+				</p>
+               <p>
+					The following figure shows a typical message exchange:
+				</p>
+               <img src="../images/HoH_Trace_Normal.png"/>
+            </div>
+            <div title="Addressing" hl7Id="Specification.3">
+               <p>
+					The <b>request message</b> SHALL include a universal resource identifier (URI), per the
+					HTTP specification. This URI SHOULD indicate
+					the appropriate "interface" for the message. This is analogous to the port number in 
+					a standard 
+					MLLP 
+					configuration. 
+				</p>
+               <p>
+					For example, a receiving laboratory information system application might open an 
+					HTTP server on port 1234 which is capable of receiving several types of data. The 
+					sending system could then address ADT data to the receiving system's ADT queue using 
+					the following POST request<br/>
+				           </p>
+               <p>
+                  <b>Implementation Consideration</b>
+               </p>
+               <p>
+					An implementing receiving system MAY also choose to use a separate port for each
+					interface, as is the norm for MLLP interfaces. This is acceptable and will work,
+					but is not desirable as it is not common practise in HTTP applications. 
+				</p>
+            </div>
+            <div title="Content Type and Character Set" hl7Id="Specification.4">
+               <p>
+					The <b>request message</b> and the <b>response message</b> SHALL include a
+					<code>Content-Type</code> header, which indicates the type of data being 
+					transferred. The following MIME types apply:
+					<ul>
+                     <li>
+							If the message is a "vertical bar" encoded HL7 v2.x message, the
+							content type SHALL be:  
+							 &nbsp;&nbsp;&nbsp;&nbsp;application/hl7-v2+er7 
+						</li>
+                     <li>
+							If the message is an XML encoded HL7 v2.x message, the
+							content type SHALL be:  
+							 &nbsp;&nbsp;&nbsp;&nbsp;application/hl7-v2+xml 
+						</li>
+                     <li>
+							If the message is an XML encoded HL7 v3 message, the
+							content type SHALL be:  
+							 &nbsp;&nbsp;&nbsp;&nbsp;application/hl7-v3+xml 
+						</li>
+                     <li>
+							If the message is an XML encoded FHIR message, the
+							content type SHALL be:  
+							 &nbsp;&nbsp;&nbsp;&nbsp;application/fhir+xml 
+						</li>
+                     <li>
+							If the message is a JSON encoded FHIR message, the
+							content type SHALL be:  
+							 &nbsp;&nbsp;&nbsp;&nbsp;application/fhir+json 
+						</li>
+                     <li>
+							If the  response message  content is not an HL7 message
+							(for instance because the server is malfunctioning and returning a 500 status or the URI being 
+							addressed is unknown and the server is returning a 404 status),
+							the content SHALL be another type, such as  
+							 &nbsp;&nbsp;&nbsp;&nbsp;text/html  or  text/plain 
+						</li>
+                  </ul>
+				           </p>
+               <p>
+				              <b>Non-error response messages</b> being transmitted by a server MUST use the same
+				    content type as the corresponding <b>request message</b>, if the response message
+				    payload is an HL7 v2.x message. In other words, if a request message uses XML
+				    encoding, the corresponding response message MUST also
+				    use XML encoding. See section <a href="#2_6_RESP_CODES">2.6 Response Codes</a>
+				    for more information about response codes for error handling.
+				</p>
+               <p>
+					HL7 over HTTP message payloads SHALL use the UTF-8 character encoding
+					scheme. 
+				</p>
+               <p>
+					In addition, both the <b>request message</b> and the <b>response message</b> SHALL
+					include a charset definition which indicates which character encoding is being used
+					for the message body.  
+				</p>
+               <p>
+					The HL7 v2.x specification allows the character encoding to be
+					specified in MSH-18. When a message is received using HL7 over HTTP, this value SHALL
+					be ignored, and the character encoding specified in the HTTP 
+					"<code>Content-Type</code>" header MUST be observed instead. 
+				</p>
+               <p>
+                  <b>Implementation Consideration</b>
+               </p>
+               <p>
+					When a message is sent using HL7 over HTTP, the sending application MAY 
+					choose to use the value in MSH-18 to inform the choice of charset, although it is not
+					obligated to do so.
+				</p>
+               <p>
+					An example follows which shows the Content-Type header used
+					to indicate that a "vertical bar" encoded message is being transmitted.
+				</p>
+            </div>
+            <div title="Date" hl7Id="Specification.5">
+               <p>
+				              <b>Request messages</b> and <b>Response messages</b>
+				    SHALL provide a date header which informs the other party of the
+				    time that the message transmission was started.
+				</p>
+               <p>
+                  <b>Implementation Consideration</b>
+               </p>
+               <p>				  
+				    Note that the HTTP Date header is not required to agree with the HL7 
+				    message timestamp found in the HL7 v2.x message within MSH-7. 
+				</p>
+               <p>
+				    The recommended use of these two dates is as follows:
+				</p>
+               <ul>
+                  <li>
+						The HTTP Date header is an indication of the transmission time
+						associated with the message.	
+					</li>
+                  <li>
+						The MSH-7 timestamp is an indication of the message creation time. This
+						means that if the message is created but not delivered immediately (as in 
+						the case of a guaranteed delivery queue), the MSH-7 timestamp would contain
+						an date which is earlier than the HTTP Date header.
+					</li>
+               </ul>
+               <p>
+					 
+				</p>
+               <p>
+					An example follows which shows a date header:
+				</p>
+            </div>
+            <div title="HTTP Response Codes" hl7Id="Specification.6">
+               <p>
+					If a <b>receiving application</b> is able to respond to a request by producing
+					an HL7 response payload, the HTTP status code returned MUST be a code of
+					<code>HTTP/1.1 2xx</code>. This response payload is typically an HL7 ACK message,
+					but other message types may apply to certain exchanges (e.g. RSP_xxx)
+				</p>
+               <p>
+					The HL7 protocol defines four non successful acknowledgement codes:
+					<ul>
+                     <li>AR (Application Reject)</li>
+                     <li>AE (Application Error)</li>
+                     <li>CR (Commit Reject)</li>
+                     <li>CE (Commit Error)</li>
+                  </ul>
+				           </p>
+               <p>
+			    	When a <b>receiving application</b> produces an HL7 response payload containing 
+			    	one of these status codes, this is considered a successful interaction at the
+			    	transport layer, and response code of "HTTP/1.1 2xx" MUST be used. 
+			    </p>
+               <p>
+					Non 2xx status codes are reserved for use in cases where the message was not 
+					understood, could not be delivered to the receiving application layer, or the
+					receiving application layer failed to process the message due to an unexpected
+					error condition.
+				</p>
+               <p>
+					If the response status is not HTTP 2xx, the content type MUST NOT
+					be an HL7 payload type. Instead, a textual representation of the transport level
+					error must be provided using an appropriate content type.
+				</p>
+               <p>
+                  <b>Implementation Consideration</b>
+               </p>
+               <p>
+					Many HTTP implementations will return a content type of "text/html" to provide
+					a nicely formatted error message for internal server errors and invalid
+					addressing. Because HL7 messaging is typically processed between servers, with
+					no HTML browser present, implementers may consider using a content type
+					of "text/plain" in order to increase readability.
+				</p>
+               <p>
+					An example follows which illustrates a transport level problem.
+				</p>
+               <img src="../images/HoH_Error_500.png"/>
+               <p>
+					If no HL7 response message is generated and the <b>receiving application</b>
+					wishes to indicate an error,
+					the <b>receiving application</b> MAY use any content type to encode the response
+					message. Note that using a content type of <code>text/plain</code> may increase
+					readability within system logs.  
+			    </p>
+            </div>
+            <div title="HL7 Query/Response Mode" hl7Id="Specification.7">
+               <p>
+					HL7 defines a number of messages which are designed to be sent to a receiving system
+					in a query/response mode, where the <b>receiving system</b> receives the query message
+					and responds with a message containing data which fulfills the query.
+				</p>
+               <p>
+					When a <b>receiving system</b> responds to a query, a normal <code>HTTP 2xx</code>
+					response code MUST be used in all cases where the application response is an HL7 message. 
+				</p>
+               <img src="../images/HoH_Trace_Query.png"/>
+            </div>
+         </div>
+         <div title="Security Profiles" hl7Id="SecurityProfiles">
+            <p>
+				This specification defines three security profiles which offer various
+				levels of security. Each may be appropriate depending on the needs of the 
+				application.
+			</p>
+            <div title="Intent" hl7Id="SecurityProfiles.1">
+               <p>
+					HTTP is a widely used protocol across a vast number of different network
+					topologies and secure environments. As such there are many widely used
+					techniques for securing HTTP traffic. Each mechanism has its own
+					tradeoffs in terms of the type of security it provides (encryption, 
+					non-repudiation, tracking, etc.) and in terms of the ease of
+					implementation.   
+				</p>
+               <p>
+					Because HL7 transactions often contain data which is considered highly
+					sensitive, it is important to consider the implications of the security
+					mechanisms in place between systems which exchange HL7 data.
+				</p>
+               <p>
+					While implementors MAY choose to implement any security techniques which
+					are considered appropriate for the specific implementation, the HL7
+					over HTTP security profiles take advantage of commonly used techniques for 
+					securing the HTTP protocol, and provide a testable and commonly understood 
+					definition for security.
+				</p>
+               <p>
+					These profiles are designed to have strict requirements, such that they
+					may be tested in a conformance environment to ensure compatibility.
+				</p>
+            </div>
+            <div title="Profile Matrix" hl7Id="SecurityProfiles.2">
+               <p>
+					It is important to select a security model which
+					are appropriate to the specific application being used and
+					the network it is deployed to. The following table shows the 
+					security characteristics of the security profiles
+					described in this specification.
+				</p>
+               <ul>
+                  <li>
+						In most cases, it is desirable to use encryption in order to
+						prevent sensitive data from being intercepted.
+					</li>
+                  <li>
+						Server authentication allows the system receiving data to ensure 
+						that the data being received is coming from a legitimate
+						source.
+					</li>
+                  <li>
+						Client authentication allows the system sending data to ensure
+						that the data being transmitted is not disclosed to an 
+						unintended recipient. 
+					</li>
+               </ul>
+               <p>
+				</p>
+            </div>
+            <div title="Security Profile Level 0" hl7Id="SecurityProfiles.3">
+               <p>
+					Security Profile Level 0 (referred to hereafter as "Level 0")
+					simply refers to any situations where the profiles below are not
+					used.  
+				</p>
+               <p>
+					Note that the use of these security profiles is not mandatory in order to
+					be conformant to the HL7 over HTTP specification. There are many situations
+					where the use of this type of transport encryption is not neccesary due to 
+					network design or other aspects of the solution design.
+				</p>
+            </div>
+            <div title="Security Profile Level 1" hl7Id="SecurityProfiles.4">
+               <p>
+					Security Profile Level 1 (referred to hereafter as "Level 1")
+					consists only of a security token which allows the receiving system to
+					verify the identity of the sending system. 
+				</p>
+               <p>
+					Level 1 does not include any encryption mechanism, and therefore
+					does not protect messages in transit against eavesdropping or tampering.
+					This is an important consideration when choosing a security profile, and
+					Level 1 should therefore only be used within closed/protected networks.  
+				</p>
+               <p>
+					To implement Level 1, the <b>sending application</b> MUST include
+					a header called "Authorization", containing a basic authorization token
+					as described in Section 11.1 of RFC 1945. The basic authorization token
+					consists of the token "Basic", followed by a space, and then followed
+					by a token in the form "username:password" which has been base64 encoded.
+				</p>
+               <p>
+					The <b>receiving application</b> must be capable of validating this 
+					authorization token. If the credentials can not be successfully
+					validated, the <b>receiving application</b> SHALL return an 
+					HTTP response code of "<code>HTTP/1.1 401 Unauthorized</code>".
+				</p>
+               <p>
+					The following is an example of an authorization header for Level 1:
+				</p>
+               <p>
+					The <b>sending application</b> MUST use basic authorization in 
+					order to be conformant to Level 1. Other types such as "digest access"
+					authorization MUST NOT be used.
+				</p>
+            </div>
+            <div title="Security Profile Level 2" hl7Id="SecurityProfiles.5">
+               <p>
+					Security Profile Level 2 (referred to hereafter as "Level 2")
+					consists of a security token used to authenticate the client
+					with the server, but additionally adds an encrypted connection.
+				</p>
+               <p>
+					             <b>Sending applications</b> and <b>receiving applications</b> implementing 
+					this profile MUST implement all functionality described in
+					<a href="#SEC_L1">Security Profile Level 1</a>.
+				</p>
+               <p>
+					             <b>Sending applications</b> and <b>receiving applications</b> implementing this profile 
+					MUST additionally support the ability to communicate using HTTPS, i.e.
+					using Transport Layer Security (TLS), version 1.2 
+					(RFC 5246, <a href="http://tools.ietf.org/html/rfc5246">http://www.ietf.org/rfc/rfc2246.txt</a>) or later. 
+					Transport Layer Security provides the possibility for end-to-end encryption.
+				</p>
+               <p>
+					The certificates used SHALL be X.509 certificates based on RSA key with
+					a key length in the range between 1024 and 4096. Supported cipher suites SHALL include
+					TLS_RSA_WITH_AES_128_CBC_SHA, other ciphers MAY be chosen based on site-specific policies.
+				</p>
+               <p>
+					In addition, <b>sending applications</b> implementing this profile MUST be capable
+					of importing a public key in order to support the use of self-signed certificates.
+				</p>
+            </div>
+            <div title="Security Profile Level 3" hl7Id="SecurityProfiles.6">
+               <p>
+					             <b>Sending applications</b> and <b>receiving applications</b> implementing this 
+					profile MUST support mutual	authentication as specified in the TLS specification. 
+					Here, the client additionally presents a X.509 client certificate to the server 
+					in order to authenticate its access. 
+				</p>
+               <p>
+					Where Level 3 is being used, HTTP Basic Authentication (specified in Level 1) MAY be omitted.
+				</p>
+            </div>
+         </div>
+         <div title="Implementation Considerations"
+              hl7Id="ImplementationConsiderations">
+            <p>
+				The following section of this specification is considered non-normative, 
+				and provides guidance for application designers adding support for HL7
+				over HTTP to their applications.
+			</p>
+            <div title="Sequencing and Threading" hl7Id="ImplementationConsiderations.1">
+               <p>
+					HTTP implementations are commonly multi-threaded, particularly
+					in HTTP server implementations. This can present a risk that messages
+					will be processed in a different order than the one in which
+					they were generated. Because message sequence is often important
+					in HL7 v2.x transactional messaging, implementers should consider 
+					how to ensure that messages are processed sequentially. The HL7 
+					sequence number protocol may be used in this case.
+				</p>
+            </div>
+         </div>
+      </text>
+   </documentContent>
+</freehandDocument>
